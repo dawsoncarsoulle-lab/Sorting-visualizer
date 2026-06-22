@@ -104,12 +104,15 @@ export function AlgorithmSelector({
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-controls="algorithm-listbox"
+        aria-labelledby="algorithm-label algorithm-selected-name"
         disabled={disabled || algorithms.length === 0}
         onClick={() => (isOpen ? close() : open())}
         onKeyDown={handleKeyDown}
       >
         <span className="algorithm-dot" aria-hidden="true" />
-        <span className="algorithm-selected-name">{selected?.name ?? "Chargement…"}</span>
+        <span className="algorithm-selected-name" id="algorithm-selected-name">
+          {selected?.name ?? "Chargement…"}
+        </span>
         <span className="algorithm-count">{algorithms.length || "—"} algos</span>
         <svg className="select-chevron" viewBox="0 0 12 8" aria-hidden="true">
           <path d="m1 1.5 5 5 5-5" />
@@ -117,7 +120,12 @@ export function AlgorithmSelector({
       </button>
 
       {isOpen && (
-        <div id="algorithm-listbox" className="algorithm-listbox" role="listbox">
+        <div
+          id="algorithm-listbox"
+          className="algorithm-listbox"
+          role="listbox"
+          aria-labelledby="algorithm-label"
+        >
           {groupedAlgorithms.map(({ family, algorithms: familyAlgorithms }) => (
             <div className="algorithm-option-group" key={family} role="group" aria-label={family}>
               <div className="algorithm-group-label">

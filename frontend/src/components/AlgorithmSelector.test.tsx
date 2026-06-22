@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 
-import { cleanup, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { AlgorithmInfo } from "../types/sorting";
@@ -29,8 +28,7 @@ const algorithms: AlgorithmInfo[] = [
 afterEach(cleanup);
 
 describe("AlgorithmSelector", () => {
-  it("opens its dark custom list and selects an algorithm", async () => {
-    const user = userEvent.setup();
+  it("opens its dark custom list and selects an algorithm", () => {
     const onChange = vi.fn();
     render(
       <AlgorithmSelector
@@ -41,16 +39,15 @@ describe("AlgorithmSelector", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: /Bubble Sort/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Bubble Sort/ }));
     expect(screen.getByRole("listbox")).toBeTruthy();
-    await user.click(screen.getByRole("option", { name: "Quick Sort" }));
+    fireEvent.click(screen.getByRole("option", { name: "Quick Sort" }));
 
     expect(onChange).toHaveBeenCalledWith("quick");
     expect(screen.queryByRole("listbox")).toBeNull();
   });
 
-  it("supports arrows, Enter and Escape from the trigger", async () => {
-    const user = userEvent.setup();
+  it("supports arrows, Enter and Escape from the trigger", () => {
     const onChange = vi.fn();
     render(
       <AlgorithmSelector
@@ -63,10 +60,13 @@ describe("AlgorithmSelector", () => {
     const trigger = screen.getByRole("button", { name: /Bubble Sort/ });
     trigger.focus();
 
-    await user.keyboard("{ArrowDown}{ArrowDown}{Enter}");
+    fireEvent.keyDown(trigger, { key: "ArrowDown" });
+    fireEvent.keyDown(trigger, { key: "ArrowDown" });
+    fireEvent.keyDown(trigger, { key: "Enter" });
     expect(onChange).toHaveBeenCalledWith("quick");
 
-    await user.keyboard("{ArrowDown}{Escape}");
+    fireEvent.keyDown(trigger, { key: "ArrowDown" });
+    fireEvent.keyDown(trigger, { key: "Escape" });
     expect(screen.queryByRole("listbox")).toBeNull();
     expect(document.activeElement).toBe(trigger);
   });

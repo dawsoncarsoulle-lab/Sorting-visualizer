@@ -17,13 +17,15 @@ const statusLabels: Record<AnimationStatus, string> = {
 };
 
 export function StatsPanel({ stats, currentStep, totalSteps, progress, status }: StatsPanelProps) {
+  const statusLabel = status === "idle" && totalSteps === 0 ? "À préparer" : statusLabels[status];
+
   return (
     <section className="stats-panel" aria-label="Statistiques du tri">
       <div className="status-block">
         <span className={`status-indicator ${status}`} />
         <div>
           <span className="stat-label">État</span>
-          <strong>{statusLabels[status]}</strong>
+          <strong>{statusLabel}</strong>
         </div>
       </div>
       <div className="stat-item">
@@ -37,7 +39,9 @@ export function StatsPanel({ stats, currentStep, totalSteps, progress, status }:
       <div className="stat-item">
         <span className="stat-label">Étape</span>
         <strong>
-          {currentStep.toLocaleString("fr-FR")} / {totalSteps.toLocaleString("fr-FR")}
+          {totalSteps === 0
+            ? "Aucune exécution"
+            : `${currentStep.toLocaleString("fr-FR")} / ${totalSteps.toLocaleString("fr-FR")}`}
         </strong>
       </div>
       <div className="progress-block">
@@ -52,4 +56,3 @@ export function StatsPanel({ stats, currentStep, totalSteps, progress, status }:
     </section>
   );
 }
-

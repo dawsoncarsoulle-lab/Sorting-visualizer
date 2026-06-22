@@ -17,6 +17,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow: hidden;
   background:
     radial-gradient(circle at 20% -10%, rgba(54, 105, 232, 0.18), transparent 32rem),
     #080b14;
@@ -37,12 +38,17 @@ select:focus-visible {
 
 .app-shell {
   display: grid;
-  grid-template-rows: auto auto auto minmax(400px, 1fr) auto;
+  grid-template-rows: auto auto minmax(280px, 1fr) auto;
   gap: 14px;
   width: min(1440px, 100%);
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 620px;
   margin: 0 auto;
   padding: 22px;
+}
+
+.app-shell.has-error {
+  grid-template-rows: auto auto auto minmax(240px, 1fr) auto;
 }
 
 .app-header {
@@ -361,13 +367,22 @@ input[type="range"]:disabled {
   display: grid;
   grid-template-columns: minmax(0, 1.85fr) minmax(340px, 0.9fr);
   gap: 14px;
+  width: 100%;
+  min-width: 0;
   min-height: 0;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .canvas-panel {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
   min-height: 0;
+  height: 100%;
+  max-height: 100%;
   overflow: hidden;
 }
 
@@ -375,7 +390,10 @@ input[type="range"]:disabled {
   display: grid;
   grid-template-rows: auto auto auto minmax(0, 1fr);
   min-width: 0;
+  max-width: 100%;
   min-height: 0;
+  height: 100%;
+  max-height: 100%;
   overflow: hidden;
 }
 
@@ -503,8 +521,12 @@ input[type="range"]:disabled {
 }
 
 .code-scroll-region {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 0;
   overflow: auto;
+  contain: inline-size;
   background: #080d18;
   scrollbar-color: #34445f #0b101c;
   scrollbar-width: thin;
@@ -592,12 +614,21 @@ input[type="range"]:disabled {
 .legend .sorted { background: #35c786; }
 
 .canvas-stage {
+  position: relative;
+  width: 100%;
+  min-width: 0;
   min-height: 0;
   background:
     linear-gradient(rgba(119, 167, 255, 0.025) 1px, transparent 1px),
     linear-gradient(90deg, rgba(119, 167, 255, 0.025) 1px, transparent 1px),
     radial-gradient(circle at 50% 100%, rgba(41, 80, 173, 0.09), transparent 55%);
   background-size: 32px 32px, 32px 32px, auto;
+}
+
+.canvas-stage canvas {
+  display: block;
+  width: 100%;
+  max-width: 100%;
 }
 
 .stats-panel {
@@ -695,19 +726,37 @@ input[type="range"]:disabled {
 }
 
 @media (max-width: 980px) {
+  body {
+    overflow: auto;
+  }
+
   .app-shell {
+    grid-template-rows: auto auto auto auto;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .app-shell.has-error {
     grid-template-rows: auto auto auto auto auto;
+    height: auto;
+    min-height: 100vh;
   }
 
   .workspace-grid {
     grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
   }
 
   .canvas-panel {
+    height: auto;
+    max-height: none;
     min-height: 400px;
   }
 
   .algorithm-inspector {
+    height: auto;
+    max-height: none;
     min-height: 420px;
   }
 }

@@ -10,7 +10,7 @@ type LayoutProps = {
 
 export function Layout({ controls, canvas, inspector, stats, error }: LayoutProps) {
   return (
-    <main className="app-shell">
+    <main className={`app-shell${error ? " has-error" : ""}`}>
       <header className="app-header">
         <div className="brand-mark" aria-hidden="true">
           <span />

@@ -15,10 +15,22 @@ export function AlgorithmCodePanel({
   status,
 }: AlgorithmCodePanelProps) {
   const activeLineRef = useRef<HTMLDivElement>(null);
+  const scrollRegionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    activeLineRef.current?.scrollIntoView({ block: "nearest" });
-  }, [activeSourceLine]);
+    if (status !== "playing") return;
+    const line = activeLineRef.current;
+    const region = scrollRegionRef.current;
+    if (!line || !region) return;
+
+    const lineTop = line.offsetTop;
+    const lineBottom = lineTop + line.offsetHeight;
+    const visibleTop = region.scrollTop;
+    const visibleBottom = visibleTop + region.clientHeight;
+
+    if (lineTop < visibleTop) region.scrollTop = lineTop;
+    else if (lineBottom > visibleBottom) region.scrollTop = lineBottom - region.clientHeight;
+  }, [activeSourceLine, status]);
 
   if (!algorithm) {
     return (
@@ -59,7 +71,7 @@ export function AlgorithmCodePanel({
         <span title={algorithm.sourcePath}>{algorithm.sourcePath.split("/").at(-1)}</span>
       </div>
 
-      <div className="code-scroll-region">
+      <div className="code-scroll-region" ref={scrollRegionRef}>
         <Highlight theme={themes.vsDark} code={source} language="rust">
           {({ className, style, tokens, getLineProps, getTokenProps }) => (
             <pre className={`${className} source-code`} style={{ ...style, background: "transparent" }}>

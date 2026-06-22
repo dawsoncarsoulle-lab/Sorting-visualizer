@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import type { AlgorithmInfo } from "../types/sorting";
 import { AlgorithmCodePanel } from "./AlgorithmCodePanel";
@@ -15,10 +15,6 @@ const algorithm: AlgorithmInfo = {
   source: "fn bubble_sort() {\n    let value = 1;\n}",
 };
 
-beforeAll(() => {
-  Element.prototype.scrollIntoView = vi.fn();
-});
-
 afterEach(cleanup);
 
 describe("AlgorithmCodePanel", () => {
@@ -28,7 +24,6 @@ describe("AlgorithmCodePanel", () => {
     expect(screen.getByText("Ligne 2")).toBeTruthy();
     const activeLine = document.querySelector('[aria-current="step"]');
     expect(activeLine?.textContent).toContain("let value = 1;");
-    expect(Element.prototype.scrollIntoView).toHaveBeenCalled();
   });
 
   it("shows the collapsible algorithm description", () => {

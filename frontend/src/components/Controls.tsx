@@ -36,15 +36,15 @@ export function Controls({
 }: ControlsProps) {
   return (
     <section className="control-panel" aria-label="Contrôles du tri">
-      <label className="control-group algorithm-control" htmlFor="algorithm">
-        <span className="control-label">Algorithme</span>
+      <div className="control-group algorithm-control">
+        <span className="control-label" id="algorithm-label">Algorithme</span>
         <AlgorithmSelector
           algorithms={algorithms}
           value={algorithm}
           disabled={isLoading || isPlaying}
           onChange={onAlgorithmChange}
         />
-      </label>
+      </div>
 
       <label className="control-group" htmlFor="size">
         <span className="control-label-row">
