@@ -3,13 +3,14 @@ import type { ReactNode } from "react";
 type LayoutProps = {
   controls: ReactNode;
   canvas: ReactNode;
+  inspector: ReactNode;
   stats: ReactNode;
   error?: string | null;
 };
 
-export function Layout({ controls, canvas, stats, error }: LayoutProps) {
+export function Layout({ controls, canvas, inspector, stats, error }: LayoutProps) {
   return (
-    <main className="app-shell">
+    <main className={`app-shell${error ? " has-error" : ""}`}>
       <header className="app-header">
         <div className="brand-mark" aria-hidden="true">
           <span />
@@ -25,19 +26,21 @@ export function Layout({ controls, canvas, stats, error }: LayoutProps) {
       </header>
       {controls}
       {error && <div className="error-banner">Erreur backend : {error}</div>}
-      <section className="canvas-panel">
-        <div className="canvas-toolbar">
-          <span>Tableau actif</span>
-          <div className="legend" aria-label="Légende">
-            <span><i className="normal" />Valeur</span>
-            <span><i className="active" />Comparaison / échange</span>
-            <span><i className="sorted" />Triée</span>
+      <section className="workspace-grid">
+        <section className="canvas-panel">
+          <div className="canvas-toolbar">
+            <span>Tableau actif</span>
+            <div className="legend" aria-label="Légende">
+              <span><i className="normal" />Valeur</span>
+              <span><i className="active" />Comparaison / échange</span>
+              <span><i className="sorted" />Triée</span>
+            </div>
           </div>
-        </div>
-        <div className="canvas-stage">{canvas}</div>
+          <div className="canvas-stage">{canvas}</div>
+        </section>
+        {inspector}
       </section>
       {stats}
     </main>
   );
 }
-

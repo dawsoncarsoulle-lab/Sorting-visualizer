@@ -1,4 +1,4 @@
-import { type RefObject, useEffect } from "react";
+import { type RefObject, useEffect, useState } from "react";
 
 type CanvasRenderOptions = {
   values: number[];
@@ -16,30 +16,53 @@ const colors = {
   baseline: "rgba(148, 163, 184, 0.18)",
 };
 
+type CanvasSize = {
+  width: number;
+  height: number;
+  ratio: number;
+};
+
 export function useCanvasRenderer(
   canvasRef: RefObject<HTMLCanvasElement | null>,
   { values, highlighted, sortedIndices }: CanvasRenderOptions,
 ) {
+  const [size, setSize] = useState<CanvasSize>({ width: 0, height: 0, ratio: 1 });
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const render = () => {
+    const updateSize = () => {
       const bounds = canvas.getBoundingClientRect();
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.max(1, Math.floor(bounds.width * ratio));
       canvas.height = Math.max(1, Math.floor(bounds.height * ratio));
+      setSize({ width: bounds.width, height: bounds.height, ratio });
+    };
+
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(canvas);
+    return () => observer.disconnect();
+  }, [canvasRef]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || size.width === 0 || size.height === 0) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const { width: canvasWidth, height: canvasHeight, ratio } = size;
 
       const context = canvas.getContext("2d");
       if (!context) return;
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      context.clearRect(0, 0, bounds.width, bounds.height);
+      context.clearRect(0, 0, canvasWidth, canvasHeight);
 
       const horizontalPadding = 18;
       const topPadding = 18;
       const bottomPadding = 12;
-      const width = Math.max(1, bounds.width - horizontalPadding * 2);
-      const height = Math.max(1, bounds.height - topPadding - bottomPadding);
+      const width = Math.max(1, canvasWidth - horizontalPadding * 2);
+      const height = Math.max(1, canvasHeight - topPadding - bottomPadding);
       const slotWidth = width / Math.max(values.length, 1);
       const gap = values.length > 120 ? 0.4 : Math.min(2.5, slotWidth * 0.16);
       const maxValue = Math.max(...values, 1);
@@ -70,12 +93,8 @@ export function useCanvasRenderer(
         context.fillStyle = gradient;
         context.fillRect(x, y, barWidth, barHeight);
       });
-    };
+    });
 
-    render();
-    const observer = new ResizeObserver(render);
-    observer.observe(canvas);
-    return () => observer.disconnect();
-  }, [canvasRef, highlighted, sortedIndices, values]);
+    return () => window.cancelAnimationFrame(frame);
+  }, [canvasRef, highlighted, size, sortedIndices, values]);
 }
-

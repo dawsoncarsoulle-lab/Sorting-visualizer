@@ -9,14 +9,29 @@
 - [x] lecture, pause, pas à pas, reset et vitesse
 - [x] couleurs et statistiques en temps réel
 
-## Prochain lot — v0.2.0
+## v0.2.0 — Multi-algorithmes
 
-- [ ] Selection Sort
-- [ ] Insertion Sort
-- [ ] Quick Sort
-- [ ] Merge Sort
-- [ ] sélecteur d’algorithme alimenté par Rust
+- [x] Selection Sort
+- [x] Insertion Sort
+- [x] Cocktail Shaker Sort
+- [x] Comb Sort
+- [x] Shell Sort
+- [x] Quick Sort
+- [x] Merge Sort
+- [x] Heap Sort
+- [x] Gnome Sort
+- [x] sélecteur d’algorithme typé
+- [x] validation de taille côté Rust
+- [x] tests de replay paramétrés pour les dix algorithmes
+
+## Prochain lot
+
+- [x] métadonnées et sources d’algorithmes alimentées par Rust
+- [x] ligne Rust exécutée synchronisée avec l’animation
+- [x] panneau code/Canvas responsive
 - [ ] fiches de complexité
+- [ ] patterns de génération
+- [ ] raccourcis clavier
 
 ## Lots suivants
 

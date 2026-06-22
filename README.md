@@ -1,16 +1,21 @@
 # SortFlow
 
-Visualiseur desktop de Bubble Sort construit avec Rust, Tauri v2, React, TypeScript et Canvas 2D.
+Visualiseur desktop d’algorithmes de tri construit avec Rust, Tauri v2, React, TypeScript et Canvas 2D.
 
 ## MVP v0.1.0
 
 - génération et mélange de 10 à 200 valeurs ;
-- calcul des étapes de Bubble Sort côté Rust ;
+- dix algorithmes calculés côté Rust : Bubble, Selection, Insertion, Cocktail, Comb, Shell, Quick, Merge, Heap et Gnome Sort ;
+- sélection de l’algorithme sans modifier la liste initiale ;
+- sélecteur sombre personnalisé avec navigation clavier ;
+- affichage du fichier Rust réellement exécuté et surlignage synchronisé de la ligne active ;
+- description pédagogique repliable pour chaque algorithme ;
 - lecture, pause, pas à pas et réinitialisation ;
 - contrôle de la vitesse ;
 - couleurs distinctes pour les valeurs comparées, échangées et triées ;
 - statistiques et progression en temps réel ;
-- rendu Canvas adaptatif aux dimensions de la fenêtre.
+- rendu Canvas adaptatif avec un `ResizeObserver` persistant et dessin via `requestAnimationFrame` ;
+- validation backend limitée à 2 000 valeurs.
 
 ## Développement
 
@@ -35,7 +40,7 @@ npm --prefix frontend run tauri -- build
 ## Architecture
 
 ```text
-Rust Bubble Sort -> Vec<SortStep> -> reducer d'animation React -> Canvas 2D
+Registre et sources Rust -> Vec<SortStep + sourceLine> -> reducer React -> Canvas + panneau de code
 ```
 
 Le backend ne gère aucune temporisation ni animation. Le frontend ne réimplémente pas l’algorithme de tri.

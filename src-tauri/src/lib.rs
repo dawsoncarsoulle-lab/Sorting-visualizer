@@ -7,6 +7,7 @@ pub fn run() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             commands::ping,
+            commands::list_algorithms,
             commands::generate_sort_steps
         ])
         .run(tauri::generate_context!())

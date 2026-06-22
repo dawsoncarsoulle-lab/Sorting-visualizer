@@ -9,6 +9,7 @@ export type AnimationState = {
   currentStep: number;
   highlighted: number[];
   sortedIndices: Set<number>;
+  activeSourceLine: number | null;
   status: AnimationStatus;
   error: string | null;
 };
@@ -35,6 +36,7 @@ export function createAnimationState(values: number[]): AnimationState {
     currentStep: 0,
     highlighted: [],
     sortedIndices: new Set(),
+    activeSourceLine: null,
     status: "idle",
     error: null,
   };
@@ -66,7 +68,14 @@ function applyStep(state: AnimationState, step: SortStep): AnimationState {
       break;
   }
 
-  return { ...state, values, sortedIndices, liveStats, highlighted };
+  return {
+    ...state,
+    values,
+    sortedIndices,
+    liveStats,
+    highlighted,
+    activeSourceLine: step.sourceLine,
+  };
 }
 
 export function animationReducer(state: AnimationState, action: AnimationAction): AnimationState {
@@ -74,7 +83,7 @@ export function animationReducer(state: AnimationState, action: AnimationAction)
     case "replaceValues":
       return createAnimationState(action.values);
     case "loading":
-      return { ...state, status: "loading", error: null };
+      return { ...state, status: "loading", activeSourceLine: null, error: null };
     case "loaded":
       return {
         ...createAnimationState(state.initialValues),
@@ -98,6 +107,7 @@ export function animationReducer(state: AnimationState, action: AnimationAction)
         ...nextState,
         currentStep,
         highlighted: complete ? [] : nextState.highlighted,
+        activeSourceLine: complete ? null : nextState.activeSourceLine,
         status: complete ? "complete" : state.status,
       };
     }
@@ -107,4 +117,3 @@ export function animationReducer(state: AnimationState, action: AnimationAction)
       return { ...state, status: "idle", error: action.message };
   }
 }
-
