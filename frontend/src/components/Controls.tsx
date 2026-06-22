@@ -1,8 +1,13 @@
+import type { AlgorithmId, AlgorithmInfo } from "../types/sorting";
+import { AlgorithmSelector } from "./AlgorithmSelector";
+
 type ControlsProps = {
   isPlaying: boolean;
   isLoading: boolean;
   size: number;
   speed: number;
+  algorithm: AlgorithmId;
+  algorithms: readonly AlgorithmInfo[];
   onShuffle: () => void;
   onReset: () => void;
   onPlay: () => void;
@@ -10,6 +15,7 @@ type ControlsProps = {
   onStep: () => void;
   onSizeChange: (value: number) => void;
   onSpeedChange: (value: number) => void;
+  onAlgorithmChange: (algorithm: AlgorithmId) => void;
 };
 
 export function Controls({
@@ -17,6 +23,8 @@ export function Controls({
   isLoading,
   size,
   speed,
+  algorithm,
+  algorithms,
   onShuffle,
   onReset,
   onPlay,
@@ -24,17 +32,19 @@ export function Controls({
   onStep,
   onSizeChange,
   onSpeedChange,
+  onAlgorithmChange,
 }: ControlsProps) {
   return (
     <section className="control-panel" aria-label="Contrôles du tri">
-      <div className="control-group algorithm-control">
+      <label className="control-group algorithm-control" htmlFor="algorithm">
         <span className="control-label">Algorithme</span>
-        <div className="select-display">
-          <span className="algorithm-dot" />
-          Bubble Sort
-          <span className="phase-pill">MVP</span>
-        </div>
-      </div>
+        <AlgorithmSelector
+          algorithms={algorithms}
+          value={algorithm}
+          disabled={isLoading || isPlaying}
+          onChange={onAlgorithmChange}
+        />
+      </label>
 
       <label className="control-group" htmlFor="size">
         <span className="control-label-row">
@@ -90,4 +100,3 @@ export function Controls({
     </section>
   );
 }
-

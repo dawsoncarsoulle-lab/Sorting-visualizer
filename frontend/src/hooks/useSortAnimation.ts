@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 import { animationReducer, createAnimationState } from "../lib/animationState";
 import { generateValues } from "../lib/generateValues";
-import type { SortResult } from "../types/sorting";
+import type { AlgorithmId, SortResult } from "../types/sorting";
 
 const INITIAL_SIZE = 64;
 
@@ -14,6 +14,7 @@ function errorMessage(error: unknown): string {
 export function useSortAnimation() {
   const [size, setSizeState] = useState(INITIAL_SIZE);
   const [speed, setSpeed] = useState(50);
+  const [algorithm, setAlgorithmState] = useState<AlgorithmId>("bubble");
   const [state, dispatch] = useReducer(
     animationReducer,
     generateValues(INITIAL_SIZE),
@@ -25,7 +26,7 @@ export function useSortAnimation() {
       dispatch({ type: "loading" });
       try {
         const result = await invoke<SortResult>("generate_sort_steps", {
-          algorithm: "bubble",
+          algorithm,
           values: state.initialValues,
         });
         dispatch({ type: "loaded", result, play });
@@ -34,7 +35,7 @@ export function useSortAnimation() {
         dispatch({ type: "failure", message: errorMessage(error) });
       }
     },
-    [state.initialValues],
+    [algorithm, state.initialValues],
   );
 
   const play = useCallback(() => {
@@ -64,6 +65,10 @@ export function useSortAnimation() {
     setSizeState(nextSize);
     dispatch({ type: "replaceValues", values: generateValues(nextSize) });
   }, []);
+  const setAlgorithm = useCallback((nextAlgorithm: AlgorithmId) => {
+    setAlgorithmState(nextAlgorithm);
+    dispatch({ type: "reset" });
+  }, []);
 
   useEffect(() => {
     if (state.status !== "playing") return;
@@ -86,9 +91,11 @@ export function useSortAnimation() {
     state,
     size,
     speed,
+    algorithm,
     progress,
     setSize,
     setSpeed,
+    setAlgorithm,
     shuffle,
     reset,
     play,
