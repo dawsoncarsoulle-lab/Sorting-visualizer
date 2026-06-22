@@ -63,7 +63,19 @@ export function AlgorithmCodePanel({
 
       <details className="algorithm-description">
         <summary>À propos de l’algorithme</summary>
-        <p>{algorithm.description}</p>
+        <div className="algorithm-description-content">
+          <p>{algorithm.description}</p>
+          <div className="complexity-grid" aria-label="Complexité de l’algorithme">
+            <div><span>Meilleur</span><strong>{algorithm.bestCase}</strong></div>
+            <div><span>Moyen</span><strong>{algorithm.averageCase}</strong></div>
+            <div><span>Pire</span><strong>{algorithm.worstCase}</strong></div>
+          </div>
+          <div className="algorithm-properties">
+            <span>Stable <strong>{algorithm.stable ? "Oui" : "Non"}</strong></span>
+            <span>In-place <strong>{algorithm.inPlace ? "Oui" : "Non"}</strong></span>
+            <span>Mémoire <strong>{algorithm.memory}</strong></span>
+          </div>
+        </div>
       </details>
 
       <div className="code-file-bar">

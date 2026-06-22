@@ -28,6 +28,12 @@ const ALGORITHMS: [AlgorithmEntry; 10] = [
             description: "Bubble Sort parcourt plusieurs fois le tableau, compare chaque paire de voisins et les échange lorsqu'ils sont dans le mauvais ordre. Il est très lisible, mais devient lent lorsque la taille augmente.",
             source_path: "src-tauri/src/algorithms/bubble.rs",
             source: include_str!("bubble.rs"),
+            best_case: "O(n)",
+            average_case: "O(n²)",
+            worst_case: "O(n²)",
+            stable: true,
+            in_place: true,
+            memory: "O(1)",
         },
         sort: bubble::bubble_sort,
     },
@@ -39,6 +45,12 @@ const ALGORITHMS: [AlgorithmEntry; 10] = [
             description: "Selection Sort recherche le plus petit élément de la partie non triée, puis le place à sa position définitive. Son nombre d'échanges reste faible, mais il effectue toujours beaucoup de comparaisons.",
             source_path: "src-tauri/src/algorithms/selection.rs",
             source: include_str!("selection.rs"),
+            best_case: "O(n²)",
+            average_case: "O(n²)",
+            worst_case: "O(n²)",
+            stable: false,
+            in_place: true,
+            memory: "O(1)",
         },
         sort: selection::selection_sort,
     },
@@ -50,6 +62,12 @@ const ALGORITHMS: [AlgorithmEntry; 10] = [
             description: "Insertion Sort construit une zone triée en insérant chaque nouvelle valeur à sa place. Il est particulièrement efficace sur les petits tableaux ou les données presque triées.",
             source_path: "src-tauri/src/algorithms/insertion.rs",
             source: include_str!("insertion.rs"),
+            best_case: "O(n)",
+            average_case: "O(n²)",
+            worst_case: "O(n²)",
+            stable: true,
+            in_place: true,
+            memory: "O(1)",
         },
         sort: insertion::insertion_sort,
     },
@@ -61,6 +79,12 @@ const ALGORITHMS: [AlgorithmEntry; 10] = [
             description: "Cocktail Shaker Sort est une variante bidirectionnelle de Bubble Sort. Chaque passage déplace les grandes valeurs vers la droite, puis les petites vers la gauche.",
             source_path: "src-tauri/src/algorithms/cocktail.rs",
             source: include_str!("cocktail.rs"),
+            best_case: "O(n)",
+            average_case: "O(n²)",
+            worst_case: "O(n²)",
+            stable: true,
+            in_place: true,
+            memory: "O(1)",
         },
         sort: cocktail::cocktail_sort,
     },
@@ -72,6 +96,12 @@ const ALGORITHMS: [AlgorithmEntry; 10] = [
             description: "Comb Sort améliore Bubble Sort en comparant d'abord des éléments éloignés. L'écart diminue progressivement jusqu'à un passage final entre voisins.",
             source_path: "src-tauri/src/algorithms/comb.rs",
             source: include_str!("comb.rs"),
+            best_case: "O(n log n)",
+            average_case: "O(n²)",
+            worst_case: "O(n²)",
+            stable: false,
+            in_place: true,
+            memory: "O(1)",
         },
         sort: comb::comb_sort,
     },
@@ -83,6 +113,12 @@ const ALGORITHMS: [AlgorithmEntry; 10] = [
             description: "Shell Sort applique des insertions sur des sous-séquences espacées, puis réduit l'écart. Les déplacements lointains accélèrent nettement le tri par insertion classique.",
             source_path: "src-tauri/src/algorithms/shell.rs",
             source: include_str!("shell.rs"),
+            best_case: "O(n log n)",
+            average_case: "≈ O(n^1.5)",
+            worst_case: "O(n²)",
+            stable: false,
+            in_place: true,
+            memory: "O(1)",
         },
         sort: shell::shell_sort,
     },
@@ -94,6 +130,12 @@ const ALGORITHMS: [AlgorithmEntry; 10] = [
             description: "Quick Sort choisit un pivot, partitionne les valeurs de part et d'autre, puis trie récursivement les deux partitions. Il est généralement très rapide, mais dépend du choix du pivot.",
             source_path: "src-tauri/src/algorithms/quick.rs",
             source: include_str!("quick.rs"),
+            best_case: "O(n log n)",
+            average_case: "O(n log n)",
+            worst_case: "O(n²)",
+            stable: false,
+            in_place: true,
+            memory: "O(log n)",
         },
         sort: quick::quick_sort,
     },
@@ -105,6 +147,12 @@ const ALGORITHMS: [AlgorithmEntry; 10] = [
             description: "Merge Sort divise récursivement le tableau, trie chaque moitié, puis les fusionne. Ses performances sont régulières et ses étapes écrivent des valeurs plutôt que de les échanger.",
             source_path: "src-tauri/src/algorithms/merge.rs",
             source: include_str!("merge.rs"),
+            best_case: "O(n log n)",
+            average_case: "O(n log n)",
+            worst_case: "O(n log n)",
+            stable: true,
+            in_place: false,
+            memory: "O(n)",
         },
         sort: merge::merge_sort,
     },
@@ -116,6 +164,12 @@ const ALGORITHMS: [AlgorithmEntry; 10] = [
             description: "Heap Sort organise les valeurs dans un tas maximal, extrait successivement sa racine et restaure le tas. Il garantit une complexité logarithmique par extraction sans mémoire auxiliaire importante.",
             source_path: "src-tauri/src/algorithms/heap.rs",
             source: include_str!("heap.rs"),
+            best_case: "O(n log n)",
+            average_case: "O(n log n)",
+            worst_case: "O(n log n)",
+            stable: false,
+            in_place: true,
+            memory: "O(1)",
         },
         sort: heap::heap_sort,
     },
@@ -127,6 +181,12 @@ const ALGORITHMS: [AlgorithmEntry; 10] = [
             description: "Gnome Sort avance tant que les voisins sont ordonnés et recule après chaque échange. Son comportement est intuitif et proche du tri par insertion, mais sa complexité reste quadratique.",
             source_path: "src-tauri/src/algorithms/gnome.rs",
             source: include_str!("gnome.rs"),
+            best_case: "O(n)",
+            average_case: "O(n²)",
+            worst_case: "O(n²)",
+            stable: true,
+            in_place: true,
+            memory: "O(1)",
         },
         sort: gnome::gnome_sort,
     },
@@ -348,5 +408,18 @@ mod tests {
 
         assert_eq!(catalog.len(), 10);
         assert_eq!(ids.len(), catalog.len());
+        assert!(catalog.iter().all(|info| {
+            !info.best_case.is_empty()
+                && !info.average_case.is_empty()
+                && !info.worst_case.is_empty()
+                && !info.memory.is_empty()
+        }));
+    }
+
+    #[test]
+    fn bubble_sort_uses_its_linear_best_case() {
+        let result = run_algorithm("bubble", (1..=20).collect()).expect("bubble is registered");
+        assert_eq!(result.stats.comparisons, 19);
+        assert_eq!(result.stats.swaps, 0);
     }
 }

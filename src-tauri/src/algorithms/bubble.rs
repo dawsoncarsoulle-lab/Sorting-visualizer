@@ -9,11 +9,13 @@ pub fn bubble_sort(input: Vec<u32>) -> SortResult {
     let n = values.len();
 
     for sorted_count in 0..n {
+        let mut swapped = false;
         for j in 0..n - sorted_count - 1 {
             record_compare(&mut steps, &mut stats, j, j + 1, line!());
 
             if values[j] > values[j + 1] {
                 record_swap(&mut values, &mut steps, &mut stats, j, j + 1, line!());
+                swapped = true;
             }
         }
 
@@ -21,6 +23,11 @@ pub fn bubble_sort(input: Vec<u32>) -> SortResult {
             i: n - sorted_count - 1,
             source_line: line!(),
         });
+
+        if !swapped {
+            super::mark_all_sorted(&mut steps, n - sorted_count - 1, line!());
+            break;
+        }
     }
 
     SortResult { steps, stats }

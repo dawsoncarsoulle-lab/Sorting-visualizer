@@ -14,6 +14,12 @@ const algorithms: AlgorithmInfo[] = [
     description: "Bubble description",
     sourcePath: "bubble.rs",
     source: "fn bubble_sort() {}",
+    bestCase: "O(n)",
+    averageCase: "O(n²)",
+    worstCase: "O(n²)",
+    stable: true,
+    inPlace: true,
+    memory: "O(1)",
   },
   {
     id: "quick",
@@ -22,6 +28,12 @@ const algorithms: AlgorithmInfo[] = [
     description: "Quick description",
     sourcePath: "quick.rs",
     source: "fn quick_sort() {}",
+    bestCase: "O(n log n)",
+    averageCase: "O(n log n)",
+    worstCase: "O(n²)",
+    stable: false,
+    inPlace: true,
+    memory: "O(log n)",
   },
 ];
 

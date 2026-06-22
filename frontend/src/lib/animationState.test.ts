@@ -27,6 +27,7 @@ describe("animationReducer", () => {
     expect(state.sortedIndices.has(1)).toBe(true);
     expect(state.status).toBe("complete");
     expect(state.activeSourceLine).toBeNull();
+    expect(state.activeOperation).toBeNull();
   });
 
   it("restores the initial values on reset", () => {
@@ -51,11 +52,36 @@ describe("animationReducer", () => {
     });
     state = animationReducer(state, { type: "applyNext" });
     expect(state.activeSourceLine).toBe(21);
+    expect(state.activeOperation?.description).toBe("Comparaison des indices 0 et 1");
 
     state = animationReducer(state, { type: "pause" });
     expect(state.activeSourceLine).toBe(21);
 
     state = animationReducer(state, { type: "reset" });
     expect(state.activeSourceLine).toBeNull();
+  });
+
+  it("applies a batch with a single reducer action", () => {
+    let state = createAnimationState([2, 1, 3]);
+    state = animationReducer(state, {
+      type: "loaded",
+      play: true,
+      result: {
+        steps: [
+          { type: "Compare", i: 0, j: 1, sourceLine: 30 },
+          { type: "Swap", i: 0, j: 1, sourceLine: 31 },
+          { type: "Compare", i: 1, j: 2, sourceLine: 32 },
+        ],
+        stats: { comparisons: 2, swaps: 1, writes: 0 },
+      },
+    });
+
+    state = animationReducer(state, { type: "applyMany", count: 2 });
+
+    expect(state.values).toEqual([1, 2, 3]);
+    expect(state.currentStep).toBe(2);
+    expect(state.liveStats).toEqual({ comparisons: 1, swaps: 1, writes: 0 });
+    expect(state.activeSourceLine).toBe(31);
+    expect(state.activeOperation?.kind).toBe("swap");
   });
 });

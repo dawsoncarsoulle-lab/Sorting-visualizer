@@ -27,7 +27,7 @@ export function AlgorithmSelector({
 
   const groupedAlgorithms = useMemo(
     () =>
-      (["Simple", "Efficient"] as const).map((family) => ({
+      [...new Set(algorithms.map((algorithm) => algorithm.family))].map((family) => ({
         family,
         algorithms: algorithms.filter((algorithm) => algorithm.family === family),
       })),
@@ -129,7 +129,11 @@ export function AlgorithmSelector({
           {groupedAlgorithms.map(({ family, algorithms: familyAlgorithms }) => (
             <div className="algorithm-option-group" key={family} role="group" aria-label={family}>
               <div className="algorithm-group-label">
-                {family === "Simple" ? "Tris simples" : "Tris efficaces"}
+                {family === "Simple"
+                  ? "Tris simples"
+                  : family === "Efficient"
+                    ? "Tris efficaces"
+                    : family}
               </div>
               {familyAlgorithms.map((algorithm) => {
                 const index = algorithms.findIndex((entry) => entry.id === algorithm.id);
