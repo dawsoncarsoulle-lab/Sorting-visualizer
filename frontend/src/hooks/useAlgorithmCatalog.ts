@@ -19,7 +19,14 @@ export function useAlgorithmCatalog() {
     void invoke<unknown[]>("list_algorithms")
       .then((catalog) => {
         if (cancelled) return;
-        if (catalog.length !== 10 || !catalog.every(isAlgorithmInfo)) {
+        const uniqueIds = new Set(
+          catalog.filter(isAlgorithmInfo).map((algorithm) => algorithm.id),
+        );
+        if (
+          catalog.length === 0 ||
+          !catalog.every(isAlgorithmInfo) ||
+          uniqueIds.size !== catalog.length
+        ) {
           throw new Error("catalogue d’algorithmes invalide reçu depuis Rust");
         }
         setAlgorithms(catalog);

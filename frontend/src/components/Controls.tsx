@@ -1,5 +1,8 @@
 import type { AlgorithmId, AlgorithmInfo } from "../types/sorting";
+import type { ValuePattern } from "../lib/generateValues";
+import type { AnimationMode } from "../types/sorting";
 import { AlgorithmSelector } from "./AlgorithmSelector";
+import { PatternSelector } from "./PatternSelector";
 
 type ControlsProps = {
   isPlaying: boolean;
@@ -8,6 +11,8 @@ type ControlsProps = {
   speed: number;
   algorithm: AlgorithmId;
   algorithms: readonly AlgorithmInfo[];
+  pattern: ValuePattern;
+  mode: AnimationMode;
   onShuffle: () => void;
   onReset: () => void;
   onPlay: () => void;
@@ -16,6 +21,8 @@ type ControlsProps = {
   onSizeChange: (value: number) => void;
   onSpeedChange: (value: number) => void;
   onAlgorithmChange: (algorithm: AlgorithmId) => void;
+  onPatternChange: (pattern: ValuePattern) => void;
+  onModeChange: (mode: AnimationMode) => void;
 };
 
 export function Controls({
@@ -25,6 +32,8 @@ export function Controls({
   speed,
   algorithm,
   algorithms,
+  pattern,
+  mode,
   onShuffle,
   onReset,
   onPlay,
@@ -33,6 +42,8 @@ export function Controls({
   onSizeChange,
   onSpeedChange,
   onAlgorithmChange,
+  onPatternChange,
+  onModeChange,
 }: ControlsProps) {
   return (
     <section className="control-panel" aria-label="Contrôles du tri">
@@ -43,6 +54,15 @@ export function Controls({
           value={algorithm}
           disabled={isLoading || isPlaying}
           onChange={onAlgorithmChange}
+        />
+      </div>
+
+      <div className="control-group pattern-control">
+        <span className="control-label" id="pattern-label">Distribution</span>
+        <PatternSelector
+          value={pattern}
+          disabled={isLoading || isPlaying}
+          onChange={onPatternChange}
         />
       </div>
 
@@ -78,8 +98,28 @@ export function Controls({
       </label>
 
       <div className="button-row">
+        <div className="mode-toggle" aria-label="Mode d’animation">
+          <button
+            type="button"
+            className={mode === "educational" ? "active" : ""}
+            aria-pressed={mode === "educational"}
+            disabled={isLoading || isPlaying}
+            onClick={() => onModeChange("educational")}
+          >
+            Pédagogique
+          </button>
+          <button
+            type="button"
+            className={mode === "fast" ? "active" : ""}
+            aria-pressed={mode === "fast"}
+            disabled={isLoading || isPlaying}
+            onClick={() => onModeChange("fast")}
+          >
+            Rapide
+          </button>
+        </div>
         <button className="button secondary" disabled={isLoading || isPlaying} onClick={onShuffle}>
-          Mélanger
+          Générer
         </button>
         <button className="button secondary" disabled={isLoading || isPlaying} onClick={onReset}>
           Réinitialiser

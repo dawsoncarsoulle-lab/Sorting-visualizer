@@ -24,6 +24,7 @@ describe("useSortAnimation", () => {
     );
     const { result } = renderHook(() => useSortAnimation());
 
+    act(() => result.current.setAlgorithm("bubble"));
     act(() => result.current.play());
     await waitFor(() => expect(result.current.state.status).toBe("loading"));
 

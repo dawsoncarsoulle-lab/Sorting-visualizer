@@ -32,7 +32,9 @@ export function Layout({ controls, canvas, inspector, stats, error }: LayoutProp
             <span>Tableau actif</span>
             <div className="legend" aria-label="Légende">
               <span><i className="normal" />Valeur</span>
-              <span><i className="active" />Comparaison / échange</span>
+              <span><i className="compare" />Comparaison</span>
+              <span><i className="swap" />Échange</span>
+              <span><i className="write" />Écriture</span>
               <span><i className="sorted" />Triée</span>
             </div>
           </div>

@@ -29,6 +29,11 @@
 - [x] métadonnées et sources d’algorithmes alimentées par Rust
 - [x] ligne Rust exécutée synchronisée avec l’animation
 - [x] panneau code/Canvas responsive
+- [x] fiches de complexité alimentées par Rust
+- [x] huit patterns de génération
+- [x] opération active et couleurs par type d’étape
+- [x] modes pédagogique et rapide avec reducer batch
+- [x] configuration Vitest isolée
 - [ ] fiches de complexité
 - [ ] patterns de génération
 - [ ] raccourcis clavier

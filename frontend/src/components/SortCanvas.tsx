@@ -1,16 +1,18 @@
 import { useRef } from "react";
 
 import { useCanvasRenderer } from "../hooks/useCanvasRenderer";
+import type { OperationKind } from "../types/sorting";
 
 type SortCanvasProps = {
   values: number[];
   highlighted: number[];
   sortedIndices: Set<number>;
+  operation: OperationKind | null;
 };
 
-export function SortCanvas({ values, highlighted, sortedIndices }: SortCanvasProps) {
+export function SortCanvas({ values, highlighted, sortedIndices, operation }: SortCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  useCanvasRenderer(canvasRef, { values, highlighted, sortedIndices });
+  useCanvasRenderer(canvasRef, { values, highlighted, sortedIndices, operation });
 
   return (
     <canvas
@@ -21,4 +23,3 @@ export function SortCanvas({ values, highlighted, sortedIndices }: SortCanvasPro
     />
   );
 }
-

@@ -17,23 +17,28 @@ export type SortResult = {
 
 export type AnimationStatus = "idle" | "loading" | "ready" | "playing" | "complete";
 
-export type AlgorithmId =
-  | "bubble"
-  | "selection"
-  | "insertion"
-  | "cocktail"
-  | "comb"
-  | "shell"
-  | "quick"
-  | "merge"
-  | "heap"
-  | "gnome";
+export type OperationKind = "compare" | "swap" | "set" | "markSorted";
+
+export type ActiveOperation = {
+  kind: OperationKind;
+  description: string;
+};
+
+export type AnimationMode = "educational" | "fast";
+
+export type AlgorithmId = string;
 
 export type AlgorithmInfo = {
   id: AlgorithmId;
   name: string;
-  family: "Simple" | "Efficient";
+  family: string;
   description: string;
   sourcePath: string;
   source: string;
+  bestCase: string;
+  averageCase: string;
+  worstCase: string;
+  stable: boolean;
+  inPlace: boolean;
+  memory: string;
 };

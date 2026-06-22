@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { AlgorithmCodePanel } from "./components/AlgorithmCodePanel";
 import { Controls } from "./components/Controls";
 import { Layout } from "./components/Layout";
@@ -12,10 +14,14 @@ export default function App() {
     state,
     size,
     speed,
+    pattern,
+    mode,
     algorithm,
     progress,
     setSize,
     setSpeed,
+    setPattern,
+    setMode,
     setAlgorithm,
     shuffle,
     reset,
@@ -23,9 +29,14 @@ export default function App() {
     pause,
     step,
   } = useSortAnimation();
+
+  useEffect(() => {
+    if (!algorithm && catalog.algorithms[0]) setAlgorithm(catalog.algorithms[0].id);
+  }, [algorithm, catalog.algorithms, setAlgorithm]);
+
   const selectedAlgorithm = catalog.algorithms.find((entry) => entry.id === algorithm);
   const error = catalog.error ?? state.error;
-  const isLoading = catalog.isLoading || state.status === "loading";
+  const isLoading = catalog.isLoading || !algorithm || state.status === "loading";
 
   return (
     <Layout
@@ -38,6 +49,8 @@ export default function App() {
           speed={speed}
           algorithm={algorithm}
           algorithms={catalog.algorithms}
+          pattern={pattern}
+          mode={mode}
           onShuffle={shuffle}
           onReset={reset}
           onPlay={play}
@@ -46,6 +59,8 @@ export default function App() {
           onSizeChange={setSize}
           onSpeedChange={setSpeed}
           onAlgorithmChange={setAlgorithm}
+          onPatternChange={setPattern}
+          onModeChange={setMode}
         />
       }
       canvas={
@@ -53,6 +68,7 @@ export default function App() {
           values={state.values}
           highlighted={state.highlighted}
           sortedIndices={state.sortedIndices}
+          operation={state.activeOperation?.kind ?? null}
         />
       }
       inspector={
@@ -69,6 +85,7 @@ export default function App() {
           totalSteps={state.steps.length}
           progress={progress}
           status={state.status}
+          currentOperation={state.activeOperation?.description ?? null}
         />
       }
     />

@@ -13,6 +13,12 @@ const algorithm: AlgorithmInfo = {
   description: "Compare les valeurs voisines.",
   sourcePath: "src-tauri/src/algorithms/bubble.rs",
   source: "fn bubble_sort() {\n    let value = 1;\n}",
+  bestCase: "O(n)",
+  averageCase: "O(n²)",
+  worstCase: "O(n²)",
+  stable: true,
+  inPlace: true,
+  memory: "O(1)",
 };
 
 afterEach(cleanup);
@@ -31,6 +37,8 @@ describe("AlgorithmCodePanel", () => {
 
     expect(screen.getByText("À propos de l’algorithme")).toBeTruthy();
     expect(screen.getByText(algorithm.description)).toBeTruthy();
+    expect(screen.getAllByText("O(n²)")).toHaveLength(2);
+    expect(screen.getAllByText("Oui")).toHaveLength(2);
     expect(screen.getByText("En attente d’exécution")).toBeTruthy();
   });
 });

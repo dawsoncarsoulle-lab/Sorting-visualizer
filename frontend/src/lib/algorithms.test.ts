@@ -1,13 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import { ALGORITHM_IDS, isAlgorithmInfo } from "./algorithms";
+import { isAlgorithmInfo } from "./algorithms";
 
 describe("algorithm registry", () => {
-  it("exposes ten unique algorithms", () => {
-    expect(ALGORITHM_IDS).toHaveLength(10);
-    expect(new Set(ALGORITHM_IDS).size).toBe(ALGORITHM_IDS.length);
-  });
-
   it("validates catalog entries received from Rust", () => {
     expect(
       isAlgorithmInfo({
@@ -17,8 +12,14 @@ describe("algorithm registry", () => {
         description: "Description",
         sourcePath: "quick.rs",
         source: "fn quick_sort() {}",
+        bestCase: "O(n log n)",
+        averageCase: "O(n log n)",
+        worstCase: "O(n²)",
+        stable: false,
+        inPlace: true,
+        memory: "O(log n)",
       }),
     ).toBe(true);
-    expect(isAlgorithmInfo({ id: "unknown" })).toBe(false);
+    expect(isAlgorithmInfo({ id: "" })).toBe(false);
   });
 });

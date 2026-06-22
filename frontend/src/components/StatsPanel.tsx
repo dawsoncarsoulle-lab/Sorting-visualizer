@@ -6,6 +6,7 @@ type StatsPanelProps = {
   totalSteps: number;
   progress: number;
   status: AnimationStatus;
+  currentOperation: string | null;
 };
 
 const statusLabels: Record<AnimationStatus, string> = {
@@ -16,7 +17,14 @@ const statusLabels: Record<AnimationStatus, string> = {
   complete: "Terminé",
 };
 
-export function StatsPanel({ stats, currentStep, totalSteps, progress, status }: StatsPanelProps) {
+export function StatsPanel({
+  stats,
+  currentStep,
+  totalSteps,
+  progress,
+  status,
+  currentOperation,
+}: StatsPanelProps) {
   const statusLabel = status === "idle" && totalSteps === 0 ? "À préparer" : statusLabels[status];
 
   return (
@@ -37,12 +45,20 @@ export function StatsPanel({ stats, currentStep, totalSteps, progress, status }:
         <strong>{stats.swaps.toLocaleString("fr-FR")}</strong>
       </div>
       <div className="stat-item">
+        <span className="stat-label">Écritures</span>
+        <strong>{stats.writes.toLocaleString("fr-FR")}</strong>
+      </div>
+      <div className="stat-item">
         <span className="stat-label">Étape</span>
         <strong>
           {totalSteps === 0
             ? "Aucune exécution"
             : `${currentStep.toLocaleString("fr-FR")} / ${totalSteps.toLocaleString("fr-FR")}`}
         </strong>
+      </div>
+      <div className="operation-block">
+        <span className="stat-label">Opération active</span>
+        <strong>{currentOperation ?? "Clique sur Lecture pour préparer le tri"}</strong>
       </div>
       <div className="progress-block">
         <div className="progress-copy">

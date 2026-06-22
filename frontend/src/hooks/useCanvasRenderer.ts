@@ -1,16 +1,23 @@
 import { type RefObject, useEffect, useState } from "react";
 
+import type { OperationKind } from "../types/sorting";
+
 type CanvasRenderOptions = {
   values: number[];
   highlighted: number[];
   sortedIndices: Set<number>;
+  operation: OperationKind | null;
 };
 
 const colors = {
   normalTop: "#77a7ff",
   normalBottom: "#3569e8",
-  highlightedTop: "#ffd36a",
-  highlightedBottom: "#f08a24",
+  compareTop: "#fde68a",
+  compareBottom: "#d99a18",
+  swapTop: "#fdba74",
+  swapBottom: "#ea580c",
+  setTop: "#fda4af",
+  setBottom: "#e11d48",
   sortedTop: "#63e6ad",
   sortedBottom: "#20a96b",
   baseline: "rgba(148, 163, 184, 0.18)",
@@ -24,7 +31,7 @@ type CanvasSize = {
 
 export function useCanvasRenderer(
   canvasRef: RefObject<HTMLCanvasElement | null>,
-  { values, highlighted, sortedIndices }: CanvasRenderOptions,
+  { values, highlighted, sortedIndices, operation }: CanvasRenderOptions,
 ) {
   const [size, setSize] = useState<CanvasSize>({ width: 0, height: 0, ratio: 1 });
 
@@ -77,13 +84,25 @@ export function useCanvasRenderer(
         const barWidth = Math.max(0.7, slotWidth - gap);
         const isHighlighted = highlighted.includes(index);
         const isSorted = sortedIndices.has(index);
+        const activeTop =
+          operation === "set"
+            ? colors.setTop
+            : operation === "swap"
+              ? colors.swapTop
+              : colors.compareTop;
+        const activeBottom =
+          operation === "set"
+            ? colors.setBottom
+            : operation === "swap"
+              ? colors.swapBottom
+              : colors.compareBottom;
         const top = isHighlighted
-          ? colors.highlightedTop
+          ? activeTop
           : isSorted
             ? colors.sortedTop
             : colors.normalTop;
         const bottom = isHighlighted
-          ? colors.highlightedBottom
+          ? activeBottom
           : isSorted
             ? colors.sortedBottom
             : colors.normalBottom;
@@ -96,5 +115,5 @@ export function useCanvasRenderer(
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [canvasRef, highlighted, size, sortedIndices, values]);
+  }, [canvasRef, highlighted, operation, size, sortedIndices, values]);
 }
